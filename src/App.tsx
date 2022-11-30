@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import logo from './logo.svg';
 import './App.module.css';
 import {Display} from "./components/Display";
@@ -18,8 +18,33 @@ function App() {
 
     const [error, setError] = useState<null | string>(null)
 
+    useEffect(() => {localStorage.setItem('maxSetValue', JSON.stringify(maxValue))}, [maxValue])
+    useEffect(() => {
+        let value = localStorage.getItem('maxSetValue')
+        if (value) {
+            setMaxValue(JSON.parse(value))
+        }    },[])
+
+    useEffect(() => {localStorage.setItem('startSetValue', JSON.stringify(startValue))}, [startValue])
+    useEffect(() => {
+        let value = localStorage.getItem('startSetValue')
+        if (value) {
+            setStartValue(JSON.parse(value))
+        }    },[])
+
+    useEffect(() => {localStorage.setItem('score', JSON.stringify(score))}, [score])
+    useEffect(() => {
+        let value = localStorage.getItem('score')
+        if (value) {
+            setScore(JSON.parse(value))
+        }
+    },[])
+
+
+
+
     const increaseCount = () => {
-            setScore(score + 1)
+        setScore(score + 1)
     }
     const decreaseCount = () => {
         setScore(score - 1)
@@ -35,6 +60,7 @@ function App() {
             setStartScore(startValue)
             setScore(startValue)
             setError(null)
+          localStorage.setItem('startSetValue', JSON.stringify(startValue))
         }
     }
 
@@ -48,7 +74,8 @@ function App() {
                                 maxValue={maxValue}/>
                 </div>
                 <div className={styles.buttonBox}>
-                    <Button name={'set'} callBack={setNewSettingsScore} isDisabled={startScore === startValue && maxScore === maxValue}/>
+                    <Button name={'set'} callBack={setNewSettingsScore}
+                            isDisabled={startScore === startValue && maxScore === maxValue}/>
                 </div>
             </div>
             <div className={styles.counterBox}>
